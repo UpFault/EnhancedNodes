@@ -1,0 +1,21 @@
+<project name="EnhancedNodes" default="Build">
+    <!-- Load project version from pom.xml -->
+    <xmlproperty file="pom.xml" prefix="pom" keeproot="false" />
+
+    <target name="Build">
+        <!-- Set project.version property -->
+        <property name="project.version" value="${pom.version}" />
+
+        <!-- Check if the JAR file exists -->
+        <available file="./target/EnhancedNodes-${project.version}.jar" property="jar.exists" />
+
+        <!-- Copy the JAR file to the specified location if it exists -->
+        <copy file="./target/EnhancedNodes-${project.version}.jar" tofile="D:/Projects/Development-1.19.4/plugins/${ant.project.name}.jar" failonerror="false" />
+
+        <!-- Provide feedback based on whether the file was copied or not -->
+        <echo message="Build completed. JAR file copied: ${jar.exists}" />
+
+        <!-- Handle errors if the JAR file is missing -->
+        <fail unless="jar.exists" message="Error: JAR file not found. Build failed." />
+    </target>
+</project>

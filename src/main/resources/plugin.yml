@@ -1,0 +1,15 @@
+name: EnhancedNodes
+version: '${project.version}'
+main: com.upfault.enhancednodes.EnhancedNodes
+description: EnhancedNodes is a Minecraft plugin that adds exciting, upgrade nodes when mining ores, making your gameplay more engaging and enjoyable.
+author: UpFault
+api-version: '1.19'
+prefix: EnhancedNodes
+load: POSTWORLD
+website: "https://github.com/upfault/enhancednodes"
+commands:
+  enhancednodes:
+    aliases:
+      - en
+    permission: enhancednodes.admin
+    permission-message: "§cYou do not have the proper permission's to do that!"
