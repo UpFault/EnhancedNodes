@@ -2,6 +2,7 @@ package com.upfault.enhancednodes.commands;
 
 import com.upfault.enhancednodes.EnhancedNodes;
 import de.tr7zw.nbtapi.NBTItem;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,7 +28,8 @@ public class checkKeyCommand implements CommandExecutor {
 		}
 
 		ItemStack heldItem = player.getInventory().getItemInMainHand();
-		if (!heldItem.hasItemMeta()) {
+
+		if (heldItem == null || heldItem.getType() == Material.AIR) {
 			player.sendMessage("§cYou need to be holding an item to see if it has a key!");
 			return true;
 		}
@@ -37,7 +39,7 @@ public class checkKeyCommand implements CommandExecutor {
 		Long value2 = nbtItem.getLong("en_time_created");
 
 		if(heldItem.getItemMeta().getDisplayName().equals("§aMysterious Fragment")) {
-			player.sendMessage("§aThis is an EnhancedNodesItem but has no key!");
+			player.sendMessage("§aThis is an EnhancedNodes Item but has no key!");
 			return true;
 		}
 
@@ -49,7 +51,7 @@ public class checkKeyCommand implements CommandExecutor {
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy 'at' hh:mm:ssa");
 			String formattedDate = dateFormat.format(date);
-			player.sendMessage("§aThis is an EnhancedNode's item and has the UUID §e" + value + "§a, this item was created on §e" + formattedDate);
+			player.sendMessage("§aThis is an EnhancedNodes item and has the UUID §e" + value + "§a, this item was created on §e" + formattedDate);
 		}
 
 

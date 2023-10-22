@@ -18,10 +18,10 @@ import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class AdminPanel implements Listener {
-	private final Inventory adminInventory;
+	public static Inventory adminInventory;
 
 	public AdminPanel() {
-		this.adminInventory = Bukkit.createInventory(null, 27, "Admin Panel");
+		adminInventory = Bukkit.createInventory(null, 27, "Admin Panel");
 	}
 
 	public void openInventory(Player player) {
@@ -56,7 +56,7 @@ public class AdminPanel implements Listener {
 		border.setItemMeta(borderMeta);
 //		CLOSE MENU BUTTON
 		ItemStack cmb = new ItemStack(Material.BARRIER);
-		ItemMeta cmbMeta = border.getItemMeta();
+		ItemMeta cmbMeta = cmb.getItemMeta();
 		cmbMeta.setDisplayName("§cClose Menu");
 		cmbMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		cmb.setItemMeta(cmbMeta);
@@ -79,12 +79,11 @@ public class AdminPanel implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onInventoryClick(InventoryClickEvent event) {
-		Inventory clickedInventory = event.getClickedInventory();
 		Player player = (Player) event.getWhoClicked();
+		Inventory clickedInventory = event.getClickedInventory();
 		if (clickedInventory != null && clickedInventory.getType() == InventoryType.CHEST && event.getView().getTitle().equals("Admin Panel")) {
-			event.setCancelled(true);
 			event.setResult(Event.Result.DENY);
-
+			event.setCancelled(true);
 			if (event.getSlot() == 10) {
 				new CheatSheet().openInventory(player);
 			}
@@ -93,6 +92,7 @@ public class AdminPanel implements Listener {
 
 				player.sendMessage("§aCreating spreadsheet of plugin statistics.");
 				player.sendMessage("§ago into /plugins/EnhancedNodes/statistics. to view your server statistics!");
+				player.closeInventory();
 //				if (LocalWebServer.isRunning()) {
 //					new LocalWebServer().start();
 //					player.sendMessage("§aOpening the plugin stats page in your web browser...");

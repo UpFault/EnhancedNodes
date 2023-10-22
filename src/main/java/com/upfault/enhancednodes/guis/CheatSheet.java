@@ -19,10 +19,10 @@ import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class CheatSheet implements Listener {
-	private final Inventory cheatSheet;
+	public static Inventory cheatSheet;
 
 	public CheatSheet() {
-		this.cheatSheet = Bukkit.createInventory(null, 54, "Cheat Sheet");
+		cheatSheet = Bukkit.createInventory(null, 54, "Cheat Sheet");
 	}
 
 	public void openInventory(Player player) {
@@ -33,7 +33,7 @@ public class CheatSheet implements Listener {
 		borderMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		border.setItemMeta(borderMeta);
 		ItemStack cmb = new ItemStack(Material.BARRIER);
-		ItemMeta cmbMeta = border.getItemMeta();
+		ItemMeta cmbMeta = cmb.getItemMeta();
 		cmbMeta.setDisplayName("§cClose Menu");
 		cmbMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		cmb.setItemMeta(cmbMeta);
@@ -67,11 +67,11 @@ public class CheatSheet implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onInventoryClick(InventoryClickEvent event) {
-		Inventory clickedInventory = event.getClickedInventory();
 		Player player = (Player) event.getWhoClicked();
+		Inventory clickedInventory = event.getClickedInventory();
 		if (clickedInventory != null && clickedInventory.getType() == InventoryType.CHEST && event.getView().getTitle().equals("Cheat Sheet")) {
-			event.setCancelled(true);
 			event.setResult(Event.Result.DENY);
+			event.setCancelled(true);
 
 			switch (event.getSlot()) {
 				case 10 -> addItemToInventory(player, new CommonNode().createItem());

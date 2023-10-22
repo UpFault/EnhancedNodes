@@ -5,10 +5,14 @@ import com.upfault.enhancednodes.commands.enhancedNodesCommand;
 import com.upfault.enhancednodes.crafts.CraftingRecipes;
 import com.upfault.enhancednodes.guis.AdminPanel;
 import com.upfault.enhancednodes.guis.CheatSheet;
-import com.upfault.enhancednodes.listeners.BlockBreakListener;
-import com.upfault.enhancednodes.listeners.BlockPlaceListener;
-import com.upfault.enhancednodes.listeners.CraftItemListener;
-import org.bukkit.NamespacedKey;
+import com.upfault.enhancednodes.guis.NodeForgePanel;
+import com.upfault.enhancednodes.listeners.*;
+import com.upfault.enhancednodes.nodes.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,7 +29,6 @@ public final class EnhancedNodes extends JavaPlugin {
     public void onEnable() {
         instance = this;
         logger = getLogger();
-
         PluginManager pluginManager = getServer().getPluginManager();
         Plugin nbtApiPlugin = pluginManager.getPlugin("NBTAPI");
 
@@ -52,10 +55,13 @@ public final class EnhancedNodes extends JavaPlugin {
     }
 
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
-        getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
+        getServer().getPluginManager().registerEvents(new NodeForgePanel(), this);
         getServer().getPluginManager().registerEvents(new AdminPanel(), this);
         getServer().getPluginManager().registerEvents(new CheatSheet(), this);
+        getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
+        getServer().getPluginManager().registerEvents(new BlacklistListener(), this);
         getServer().getPluginManager().registerEvents(new CraftItemListener(), this);
     }
 

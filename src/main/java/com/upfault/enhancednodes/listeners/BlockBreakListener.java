@@ -1,23 +1,24 @@
 package com.upfault.enhancednodes.listeners;
 
-import com.upfault.enhancednodes.crafts.CraftingRecipes;
+import com.upfault.enhancednodes.EnhancedNodes;
 import com.upfault.enhancednodes.nodes.*;
 import com.upfault.enhancednodes.utils.MessageChance;
 import com.upfault.enhancednodes.utils.OreInfo;
-import de.tr7zw.nbtapi.NBT;
-import javafx.util.Pair;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
-import static com.upfault.enhancednodes.listeners.BlockPlaceListener.dataMap;
 
 public class BlockBreakListener implements Listener {
 	@EventHandler
@@ -164,23 +165,59 @@ public class BlockBreakListener implements Listener {
 	@EventHandler
 	public void onForgeBreak(BlockBreakEvent event) {
 		Location blockLocation = event.getBlock().getLocation();
-		Pair<String, Long> storedData = dataMap.get(blockLocation);
 
-		if(!(event.getBlock().getType() == Material.SMITHING_TABLE)) return;
+		if (!(event.getBlock().getType() == Material.SMITHING_TABLE)) return;
 
-		if (storedData != null) {
-			ItemStack newForgeNode = new NodeForge().createItem();
+		Block block = event.getBlock();
+		PersistentDataContainer dataContainer = block.getChunk().getPersistentDataContainer();
+		NamespacedKey keyIdentifier = new NamespacedKey(EnhancedNodes.getInstance(), "en_identifier");
+		NamespacedKey keyTimeCreated = new NamespacedKey(EnhancedNodes.getInstance(), "en_time_created");
 
-			NBT.modify(newForgeNode, nbt -> {
-				nbt.setString("en_identifier", storedData.getKey());
-				nbt.setLong("en_time_created", storedData.getValue());
-			});
+		if (dataContainer.has(keyIdentifier, PersistentDataType.STRING) && dataContainer.has(keyTimeCreated, PersistentDataType.LONG)) {
+			String enIdentifier = dataContainer.get(keyIdentifier, PersistentDataType.STRING);
+			Long enTimeCreated = dataContainer.get(keyTimeCreated, PersistentDataType.LONG);
 
-			event.setDropItems(false);
-			if(event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-				event.getBlock().getWorld().dropItemNaturally(blockLocation, newForgeNode);
+			if (!dataContainer.isEmpty()) {
+				ItemStack newForgeNode = new NodeForge().createItem();
+
+				NBTItem nbtItem = new NBTItem(newForgeNode);
+				nbtItem.setString("en_identifier", enIdentifier);
+				nbtItem.setLong("en_time_created", enTimeCreated);
+
+				event.setDropItems(false);
+
+				if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+					event.getBlock().getWorld().dropItemNaturally(blockLocation, nbtItem.getItem());
+				}
 			}
-			dataMap.remove(blockLocation);
+		}
+	}
+	@EventHandler
+	public void onBlockExplode(EntityExplodeEvent event) {
+		for (Block block : event.blockList()) {
+			EnhancedNodes.getInstance().logInfo(event.blockList().toString());
+			if (block.getType() == Material.SMITHING_TABLE) {
+				PersistentDataContainer dataContainer = block.getChunk().getPersistentDataContainer();
+				NamespacedKey keyIdentifier = new NamespacedKey(EnhancedNodes.getInstance(), "en_identifier");
+				NamespacedKey keyTimeCreated = new NamespacedKey(EnhancedNodes.getInstance(), "en_time_created");
+
+				if (dataContainer.has(keyIdentifier, PersistentDataType.STRING) && dataContainer.has(keyTimeCreated, PersistentDataType.LONG)) {
+					String enIdentifier = dataContainer.get(keyIdentifier, PersistentDataType.STRING);
+					Long enTimeCreated = dataContainer.get(keyTimeCreated, PersistentDataType.LONG);
+
+					if (!dataContainer.isEmpty()) {
+						ItemStack newForgeNode = new NodeForge().createItem();
+
+						NBTItem nbtItem = new NBTItem(newForgeNode);
+						nbtItem.setString("en_identifier", enIdentifier);
+						nbtItem.setLong("en_time_created", enTimeCreated);
+
+						block.setType(Material.AIR);
+
+						block.getWorld().dropItemNaturally(block.getLocation(), nbtItem.getItem());
+					}
+				}
+			}
 		}
 	}
 }
