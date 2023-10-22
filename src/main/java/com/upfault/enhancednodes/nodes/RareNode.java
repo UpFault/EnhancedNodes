@@ -9,7 +9,7 @@ public class RareNode extends NodeBase {
 	public RareNode() {
 		super(Material.FIREWORK_STAR);
 		setCustomName("§9Rare Node - Efficiency Upgrade");
-		setLore(List.of("§aThis is an enhanced node.", "Grant's the ability to upgrade", "§7efficiency on pickaxe's.", " ", "§9§lRARE NODE"));
+		setLore(List.of("§aThis is an enhanced node.", " ", "§7Grant's the ability to upgrade", "§7efficiency on pickaxe's.", " ", "§9§lRARE NODE"));
 		setGlowing(true);
 		setUnbreakable(true);
 	}

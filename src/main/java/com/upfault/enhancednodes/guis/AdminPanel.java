@@ -86,6 +86,7 @@ public class AdminPanel implements Listener {
 			event.setResult(Event.Result.DENY);
 
 			if (event.getSlot() == 10) {
+				new CheatSheet().openInventory(player);
 			}
 
 			if (event.getSlot() == 11) {

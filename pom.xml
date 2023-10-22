@@ -6,7 +6,7 @@
 
     <groupId>com.upfault</groupId>
     <artifactId>EnhancedNodes</artifactId>
-    <version>0.0.1</version>
+    <version>0.8.4</version>
     <packaging>jar</packaging>
 
     <name>EnhancedNodes</name>

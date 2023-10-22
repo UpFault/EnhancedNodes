@@ -2,10 +2,10 @@ package com.upfault.enhancednodes.listeners;
 
 import com.upfault.enhancednodes.crafts.CraftingRecipes;
 import com.upfault.enhancednodes.nodes.*;
-import com.upfault.enhancednodes.utils.DataMap;
 import com.upfault.enhancednodes.utils.MessageChance;
 import com.upfault.enhancednodes.utils.OreInfo;
 import de.tr7zw.nbtapi.NBT;
+import javafx.util.Pair;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import static com.upfault.enhancednodes.listeners.BlockPlaceListener.dataMap;
 
 public class BlockBreakListener implements Listener {
 	@EventHandler
@@ -68,7 +70,7 @@ public class BlockBreakListener implements Listener {
 	private OreInfo getOreInfo(Material material) {
 		Map<Material, OreInfo> oreInfo = new HashMap<>();
 		oreInfo.put(Material.STONE, new OreInfo(
-				new MessageChance(1.0 / 5, "§6§lWOAH! §eYou found a §a§lMysterious Fragment§e!", Sound.BLOCK_CHAIN_HIT, new MysteriousFragment().createItem())
+				new MessageChance(1.0 / 5, "§6§lWOAH! §eYou found a §a§lMysterious Fragment§e!", Sound.BLOCK_CHAIN_HIT, new MysteriousFragment().createItemWithoutNBT())
 
 		));
 		oreInfo.put(Material.COPPER_ORE, new OreInfo(
@@ -162,22 +164,23 @@ public class BlockBreakListener implements Listener {
 	@EventHandler
 	public void onForgeBreak(BlockBreakEvent event) {
 		Location blockLocation = event.getBlock().getLocation();
-		String value = DataMap.getData(blockLocation);
+		Pair<String, Long> storedData = dataMap.get(blockLocation);
 
 		if(!(event.getBlock().getType() == Material.SMITHING_TABLE)) return;
 
-		if (value != null) {
-			DataMap.removeData(blockLocation);
-			ItemStack newForgeNode = CraftingRecipes.createNodeForgeItem();
+		if (storedData != null) {
+			ItemStack newForgeNode = new NodeForge().createItem();
 
 			NBT.modify(newForgeNode, nbt -> {
-				nbt.setString("en_identifier", value);
+				nbt.setString("en_identifier", storedData.getKey());
+				nbt.setLong("en_time_created", storedData.getValue());
 			});
 
 			event.setDropItems(false);
 			if(event.getPlayer().getGameMode() != GameMode.CREATIVE) {
 				event.getBlock().getWorld().dropItemNaturally(blockLocation, newForgeNode);
 			}
+			dataMap.remove(blockLocation);
 		}
 	}
 }

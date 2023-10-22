@@ -4,9 +4,11 @@ import com.upfault.enhancednodes.commands.checkKeyCommand;
 import com.upfault.enhancednodes.commands.enhancedNodesCommand;
 import com.upfault.enhancednodes.crafts.CraftingRecipes;
 import com.upfault.enhancednodes.guis.AdminPanel;
+import com.upfault.enhancednodes.guis.CheatSheet;
 import com.upfault.enhancednodes.listeners.BlockBreakListener;
 import com.upfault.enhancednodes.listeners.BlockPlaceListener;
 import com.upfault.enhancednodes.listeners.CraftItemListener;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,6 +55,7 @@ public final class EnhancedNodes extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
         getServer().getPluginManager().registerEvents(new AdminPanel(), this);
+        getServer().getPluginManager().registerEvents(new CheatSheet(), this);
         getServer().getPluginManager().registerEvents(new CraftItemListener(), this);
     }
 
