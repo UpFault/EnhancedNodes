@@ -36,6 +36,11 @@ public class checkKeyCommand implements CommandExecutor {
 		String value = nbtItem.getString("en_identifier");
 		Long value2 = nbtItem.getLong("en_time_created");
 
+		if(heldItem.getItemMeta().getDisplayName().equals("§aMysterious Fragment")) {
+			player.sendMessage("§aThis is an EnhancedNodesItem but has no key!");
+			return true;
+		}
+
 		if (value == null || !nbtItem.hasCustomNbtData()) {
 			player.sendMessage("§cThis item is either not an EnhancedNodes item or does not have a key!");
 		} else {
@@ -44,7 +49,6 @@ public class checkKeyCommand implements CommandExecutor {
 
 			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy 'at' hh:mm:ssa");
 			String formattedDate = dateFormat.format(date);
-
 			player.sendMessage("§aThis is an EnhancedNode's item and has the UUID §e" + value + "§a, this item was created on §e" + formattedDate);
 		}
 

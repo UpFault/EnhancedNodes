@@ -83,6 +83,7 @@ public class CheatSheet implements Listener {
 				case 16 -> addItemToInventory(player, new MythicSTNode().createItem());
 				case 19 -> addItemToInventory(player, new MysteriousFragment().createItemWithoutNBT());
 				case 20 -> addItemToInventory(player, new NodeForge().createItem());
+				case 49 -> player.closeInventory();
 			}
 		}
 	}
