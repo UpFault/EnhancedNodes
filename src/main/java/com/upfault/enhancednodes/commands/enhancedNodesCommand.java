@@ -2,7 +2,6 @@ package com.upfault.enhancednodes.commands;
 
 import com.upfault.enhancednodes.EnhancedNodes;
 import com.upfault.enhancednodes.guis.AdminPanel;
-import com.upfault.enhancednodes.utils.LocalWebServer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,12 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class enhancedNodesCommand implements CommandExecutor, TabCompleter {
-
-	private final LocalWebServer localWebServer;
-
-	public enhancedNodesCommand(LocalWebServer localWebServer) {
-		this.localWebServer = localWebServer;
-	}
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -35,7 +28,7 @@ public class enhancedNodesCommand implements CommandExecutor, TabCompleter {
 
 		switch (args[0].toLowerCase()) {
 			case "panel" -> {
-				new AdminPanel(localWebServer).openInventory(player);
+				new AdminPanel().openInventory(player);
 				return true;
 			}
 			case "help" -> {
@@ -44,6 +37,7 @@ public class enhancedNodesCommand implements CommandExecutor, TabCompleter {
 				player.sendMessage("§a/enhancednodes help §f- §eDisplay's command information.");
 				player.sendMessage("§a/enhancednodes info §f- §eDisplay's information about the plugin.");
 				player.sendMessage("§a/enhancednodes panel §f- §eDisplay's the admin panel.");
+				player.sendMessage("§a/checkkey §f- §eUsed to check if an item has a proper NBT Key.");
 				player.sendMessage("§e§l-------------------------------------------");
 				return true;
 			}
@@ -51,6 +45,7 @@ public class enhancedNodesCommand implements CommandExecutor, TabCompleter {
 				player.sendMessage("§e§l-------------------------------------------");
 				player.sendMessage("§aPlugin Name: " + EnhancedNodes.getInstance().getDescription().getName());
 				player.sendMessage("§aVersion: " + EnhancedNodes.getInstance().getDescription().getVersion());
+				player.sendMessage("§aDependencies: " + EnhancedNodes.getInstance().getDescription().getDepend().get(0));
 				player.sendMessage("§aAuthor: " + EnhancedNodes.getInstance().getDescription().getAuthors().get(0));
 				player.sendMessage("§9GitHub Repository: " + EnhancedNodes.getInstance().getDescription().getWebsite());
 				player.sendMessage("§e§l-------------------------------------------");

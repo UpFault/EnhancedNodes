@@ -1,12 +1,16 @@
 package com.upfault.enhancednodes;
 
+import com.upfault.enhancednodes.commands.checkKeyCommand;
 import com.upfault.enhancednodes.commands.enhancedNodesCommand;
+import com.upfault.enhancednodes.crafts.CraftingRecipes;
 import com.upfault.enhancednodes.guis.AdminPanel;
 import com.upfault.enhancednodes.listeners.BlockBreakListener;
-import com.upfault.enhancednodes.utils.LocalWebServer;
+import com.upfault.enhancednodes.listeners.BlockPlaceListener;
+import com.upfault.enhancednodes.listeners.CraftItemListener;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,35 +18,46 @@ import java.util.logging.Logger;
 public final class EnhancedNodes extends JavaPlugin {
     private Logger logger;
     private static EnhancedNodes instance;
-    private LocalWebServer localWebServer;
 
     @Override
     public void onEnable() {
         instance = this;
         logger = getLogger();
-        try {
-            localWebServer = new LocalWebServer(8080);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+        PluginManager pluginManager = getServer().getPluginManager();
+        Plugin nbtApiPlugin = pluginManager.getPlugin("NBTAPI");
+
+        if (nbtApiPlugin == null || !nbtApiPlugin.isEnabled()) {
+            logError("NBTAPI is required for this plugin to work. Disabling...");
+            logInfo("You can download the plugin here: https://www.spigotmc.org/resources/nbt-api.7939/");
+            pluginManager.disablePlugin(this);
+            return;
         }
+
         registerEvents();
         registerCommands();
+        registerCrafts();
     }
 
+    private void registerCrafts() {
+        CraftingRecipes.registerNodeForgeRecipe(this);
+    }
 
     private void registerCommands() {
-        Objects.requireNonNull(getServer().getPluginCommand("enhancednodes")).setExecutor(new enhancedNodesCommand(localWebServer));
-        Objects.requireNonNull(getServer().getPluginCommand("enhancednodes")).setTabCompleter(new enhancedNodesCommand(localWebServer));
+        Objects.requireNonNull(getServer().getPluginCommand("enhancednodes")).setExecutor(new enhancedNodesCommand());
+        Objects.requireNonNull(getServer().getPluginCommand("enhancednodes")).setTabCompleter(new enhancedNodesCommand());
+        Objects.requireNonNull(getServer().getPluginCommand("checkkey")).setExecutor(new checkKeyCommand());
     }
 
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
-        getServer().getPluginManager().registerEvents(new AdminPanel(localWebServer), this);
+        getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
+        getServer().getPluginManager().registerEvents(new AdminPanel(), this);
+        getServer().getPluginManager().registerEvents(new CraftItemListener(), this);
     }
 
     @Override
     public void onDisable() {
-       localWebServer.stop();
     }
 
     public static EnhancedNodes getInstance() {

@@ -5,11 +5,16 @@ description: EnhancedNodes is a Minecraft plugin that adds exciting, upgrade nod
 author: UpFault
 api-version: '1.19'
 prefix: EnhancedNodes
+depend:
+  - NBTAPI
 load: POSTWORLD
 website: "https://github.com/upfault/enhancednodes"
 commands:
   enhancednodes:
     aliases:
       - en
+    permission: enhancednodes.admin
+    permission-message: "§cYou do not have the proper permission's to do that!"
+  checkkey:
     permission: enhancednodes.admin
     permission-message: "§cYou do not have the proper permission's to do that!"

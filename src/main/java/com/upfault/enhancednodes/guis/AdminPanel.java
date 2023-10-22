@@ -1,6 +1,5 @@
 package com.upfault.enhancednodes.guis;
 
-import com.upfault.enhancednodes.utils.LocalWebServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,10 +19,8 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class AdminPanel implements Listener {
 	private final Inventory adminInventory;
-	private final LocalWebServer localWebServer;
 
-	public AdminPanel(LocalWebServer localWebServer) {
-		this.localWebServer = localWebServer;
+	public AdminPanel() {
 		this.adminInventory = Bukkit.createInventory(null, 27, "Admin Panel");
 	}
 
@@ -83,31 +80,28 @@ public class AdminPanel implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onInventoryClick(InventoryClickEvent event) {
 		Inventory clickedInventory = event.getClickedInventory();
+		Player player = (Player) event.getWhoClicked();
 		if (clickedInventory != null && clickedInventory.getType() == InventoryType.CHEST && event.getView().getTitle().equals("Admin Panel")) {
 			event.setCancelled(true);
 			event.setResult(Event.Result.DENY);
 
 			if (event.getSlot() == 10) {
-				// Handle the slot 10 click
 			}
 
 			if (event.getSlot() == 11) {
-				Player player = (Player) event.getWhoClicked();
 
-				// Check if localWebServer is not null before using it
-				if (this.localWebServer != null) {
-					if (this.localWebServer.isRunning()) {
-						player.sendMessage("§cThe web server is already running. Please try again later.");
-					} else {
-						this.localWebServer.startServer();
-						player.sendMessage("§aOpening the plugin stats page in your web browser...");
-						player.sendMessage("§eTo view Plugin Statistics, open your web browser and enter this URL: §f§n" + localWebServer.getWebURL());
-					}
-					player.closeInventory();
-				} else {
-					player.sendMessage("§cThe web server is not available. Please try again later.");
-				}
+				player.sendMessage("§aCreating spreadsheet of plugin statistics.");
+				player.sendMessage("§ago into /plugins/EnhancedNodes/statistics. to view your server statistics!");
+//				if (LocalWebServer.isRunning()) {
+//					new LocalWebServer().start();
+//					player.sendMessage("§aOpening the plugin stats page in your web browser...");
+//					player.sendMessage("§eTo view Plugin Statistics, enter this URL in your browser: §f§nhttp://localhost:8080");
+//					player.closeInventory();
+//				} else {
+//					player.sendMessage("§cThe web server is not available or is currently running. Please try again later.");
+//				}
 			}
+
 
 			if (event.getSlot() == 22) {
 				event.getWhoClicked().closeInventory();
