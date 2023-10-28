@@ -15,6 +15,3 @@ commands:
       - en
     permission: enhancednodes.admin
     permission-message: "§cYou do not have the proper permission's to do that!"
-  checkkey:
-    permission: enhancednodes.admin
-    permission-message: "§cYou do not have the proper permission's to do that!"

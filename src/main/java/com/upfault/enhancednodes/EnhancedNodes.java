@@ -1,18 +1,12 @@
 package com.upfault.enhancednodes;
 
-import com.upfault.enhancednodes.commands.checkKeyCommand;
 import com.upfault.enhancednodes.commands.enhancedNodesCommand;
 import com.upfault.enhancednodes.crafts.CraftingRecipes;
 import com.upfault.enhancednodes.guis.AdminPanel;
 import com.upfault.enhancednodes.guis.CheatSheet;
 import com.upfault.enhancednodes.guis.NodeForgePanel;
 import com.upfault.enhancednodes.listeners.*;
-import com.upfault.enhancednodes.nodes.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,18 +45,18 @@ public final class EnhancedNodes extends JavaPlugin {
     private void registerCommands() {
         Objects.requireNonNull(getServer().getPluginCommand("enhancednodes")).setExecutor(new enhancedNodesCommand());
         Objects.requireNonNull(getServer().getPluginCommand("enhancednodes")).setTabCompleter(new enhancedNodesCommand());
-        Objects.requireNonNull(getServer().getPluginCommand("checkkey")).setExecutor(new checkKeyCommand());
     }
 
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new NodeForgePanel(), this);
-        getServer().getPluginManager().registerEvents(new AdminPanel(), this);
-        getServer().getPluginManager().registerEvents(new CheatSheet(), this);
+        Bukkit.getPluginManager().registerEvents(new AdminPanel(), this);
+        Bukkit.getPluginManager().registerEvents(new CheatSheet(), this);
+        Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
         getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
         getServer().getPluginManager().registerEvents(new BlacklistListener(), this);
         getServer().getPluginManager().registerEvents(new CraftItemListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
     }
 
     @Override

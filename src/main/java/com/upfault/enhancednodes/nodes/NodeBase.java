@@ -73,6 +73,41 @@ public abstract class NodeBase {
 		return item;
 	}
 
+	public ItemStack createNode() {
+		ItemStack item = new ItemStack(material);
+		ItemMeta meta = item.getItemMeta();
+
+		if (customName != null) {
+			meta.setDisplayName(customName);
+		}
+
+		if (lore != null) {
+			meta.setLore(lore);
+		}
+
+		if (glowing) {
+			meta.addEnchant(Enchantment.LUCK, 1, true);
+		}
+
+		if (unbreakable) {
+			meta.setUnbreakable(true);
+		}
+
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+		item.setItemMeta(meta);
+
+		NBT.modify(item, nbt -> {
+			nbt.setString("en_identifier", String.valueOf(UUID.randomUUID()));
+			nbt.setLong("en_time_created", System.currentTimeMillis());
+			nbt.setBoolean("en_isForge", true);
+		});
+
+		return item;
+	}
+
 	public ItemStack createItemWithoutNBT() {
 		ItemStack item = new ItemStack(material);
 		ItemMeta meta = item.getItemMeta();

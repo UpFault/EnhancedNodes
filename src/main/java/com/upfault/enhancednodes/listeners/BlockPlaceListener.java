@@ -23,32 +23,31 @@ import java.util.UUID;
 public class BlockPlaceListener implements Listener {
 
 	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent event) {
+	public void onForgePlace(BlockPlaceEvent event) {
 		if(event.getItemInHand().getType() == Material.AIR) return;
 		NBTItem nbtItem = new NBTItem(event.getItemInHand());
-		String value = nbtItem.getString("en_identifier");
-		Long value2 = nbtItem.getLong("en_time_created");
-
-		if(event.getBlock().getType() == Material.SMITHING_TABLE && event.getItemInHand().equals(new NodeForge().createItemWithoutNBT()) && (nbtItem.getString("en_identifier") == null && nbtItem.getString("en_time_created") == null)) {
-			event.setCancelled(true);
-			return;
-		}
+		String identifier = nbtItem.getString("en_identifier");
+		Long timeCreated = nbtItem.getLong("en_time_created");
+		Boolean isForge = nbtItem.getBoolean("en_isForge");
 
 		if (event.getBlock().getType() == Material.SMITHING_TABLE && nbtItem.hasCustomNbtData()) {
-			if (nbtItem.getString("en_identifier") == null || nbtItem.getString("en_time_created") == null) return;
+			if (nbtItem.getString("en_identifier") == null || nbtItem.getString("en_time_created") == null || nbtItem.getBoolean("en_isForge") == null) return;
 
 			Block block = event.getBlock();
 			PersistentDataContainer dataContainer = block.getChunk().getPersistentDataContainer();
 
 			NamespacedKey keyIdentifier = new NamespacedKey(EnhancedNodes.getInstance(), "en_identifier");
-			dataContainer.set(keyIdentifier, PersistentDataType.STRING, value);
-
 			NamespacedKey keyTimeCreated = new NamespacedKey(EnhancedNodes.getInstance(), "en_time_created");
-			dataContainer.set(keyTimeCreated, PersistentDataType.LONG, value2);
+			NamespacedKey isForgeKey = new NamespacedKey(EnhancedNodes.getInstance(), "en_isForge");
+
+			dataContainer.set(keyIdentifier, PersistentDataType.STRING, identifier);
+			dataContainer.set(keyIdentifier, PersistentDataType.LONG, timeCreated);
+			dataContainer.set(keyIdentifier, PersistentDataType.STRING, isForge.toString());
 
 			block.setBlockData(block.getBlockData(), dataContainer.has(keyIdentifier));
 			block.setBlockData(block.getBlockData(), dataContainer.has(keyTimeCreated));
-			 block.getState().update();
+			block.setBlockData(block.getBlockData(), dataContainer.has(isForgeKey));
+			block.getState().update();
 		}
 	}
 }

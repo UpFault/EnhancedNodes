@@ -16,7 +16,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 public class AdminPanel implements Listener {
 	public static Inventory adminInventory;
 
@@ -25,53 +24,26 @@ public class AdminPanel implements Listener {
 	}
 
 	public void openInventory(Player player) {
+		ItemMeta meta;
 
-//		Item Menu Button
-		ItemStack imb = new ItemStack(Material.FIREWORK_STAR);
-		ItemMeta imbMeta = imb.getItemMeta();
-		imbMeta.setDisplayName("§aView All Items");
-		imbMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		List<String> imblore = List.of("§7Do a little cheating and spawn", "§7in some items. §e:)");
-		imbMeta.setLore(imblore);
-		imb.setItemMeta(imbMeta);
-//		Statistic Menu Button
-		ItemStack smb = new ItemStack(Material.FIREWORK_STAR);
-		ItemMeta smbMeta = imb.getItemMeta();
-		smbMeta.setDisplayName("§aView Statistics");
-		smbMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		List<String> smblore = List.of("§7View some statistics about", "§7Item drops, crafts, and more!", "§f ", "§cThis feature is still experimental!");
-		smbMeta.setLore(smblore);
-		smb.setItemMeta(smbMeta);
-//		Placeholder Button (does nothing)
-		ItemStack pb = new ItemStack(Material.BEDROCK);
-		ItemMeta pbMeta = pb.getItemMeta();
-		pbMeta.setDisplayName("§c§lCOMING SOON!");
-		pbMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		pb.setItemMeta(pbMeta);
-//		BORDER
-		ItemStack border = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-		ItemMeta borderMeta = border.getItemMeta();
-		borderMeta.setDisplayName("§l");
-		borderMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		border.setItemMeta(borderMeta);
-//		CLOSE MENU BUTTON
-		ItemStack cmb = new ItemStack(Material.BARRIER);
-		ItemMeta cmbMeta = cmb.getItemMeta();
-		cmbMeta.setDisplayName("§cClose Menu");
-		cmbMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		cmb.setItemMeta(cmbMeta);
-
-
-		for(int i = 0; i < 27; i++) {
-			adminInventory.setItem(i, border);
-		}
+		ItemStack imb = createMenuItem(Material.FIREWORK_STAR, "§aView All Items", "§7Do a little cheating and spawn", "§7in some items. §e:)");
+		ItemStack smb = createMenuItem(Material.FIREWORK_STAR, "§aView Statistics", "§7View some statistics about", "§7Item drops, crafts, and more!", "§f ", "§cThis feature is still experimental!");
+		ItemStack pb = createMenuItem(Material.BEDROCK, "§c§lCOMING SOON!");
+		ItemStack border = createBorderItem();
+		ItemStack cmb = createCloseMenuItem();
 
 		adminInventory.setItem(10, imb);
 		adminInventory.setItem(11, smb);
 		adminInventory.setItem(22, cmb);
 
-		for(int i = 12; i < 17; i++) {
+		for (int i = 12; i < 17; i++) {
 			adminInventory.setItem(i, pb);
+		}
+
+		for (int i = 0; i < 27; i++) {
+			if (adminInventory.getItem(i) == null) {
+				adminInventory.setItem(i, border);
+			}
 		}
 
 		player.openInventory(adminInventory);
@@ -81,33 +53,47 @@ public class AdminPanel implements Listener {
 	public void onInventoryClick(InventoryClickEvent event) {
 		Player player = (Player) event.getWhoClicked();
 		Inventory clickedInventory = event.getClickedInventory();
-		if (clickedInventory != null && clickedInventory.getType() == InventoryType.CHEST && event.getView().getTitle().equals("Admin Panel")) {
-			event.setResult(Event.Result.DENY);
+		if (clickedInventory != null && clickedInventory.getType() == InventoryType.CHEST && event.getClickedInventory() == adminInventory) {
 			event.setCancelled(true);
-			if (event.getSlot() == 10) {
+
+			int slot = event.getSlot();
+			if (slot == 10) {
 				new CheatSheet().openInventory(player);
-			}
-
-			if (event.getSlot() == 11) {
-
+			} else if (slot == 11) {
 				player.sendMessage("§aCreating spreadsheet of plugin statistics.");
-				player.sendMessage("§ago into /plugins/EnhancedNodes/statistics. to view your server statistics!");
+				player.sendMessage("§ago into /plugins/EnhancedNodes/statistics to view your server statistics!");
 				player.closeInventory();
-//				if (LocalWebServer.isRunning()) {
-//					new LocalWebServer().start();
-//					player.sendMessage("§aOpening the plugin stats page in your web browser...");
-//					player.sendMessage("§eTo view Plugin Statistics, enter this URL in your browser: §f§nhttp://localhost:8080");
-//					player.closeInventory();
-//				} else {
-//					player.sendMessage("§cThe web server is not available or is currently running. Please try again later.");
-//				}
-			}
-
-
-			if (event.getSlot() == 22) {
-				event.getWhoClicked().closeInventory();
+			} else if (slot == 22) {
+				player.closeInventory();
 			}
 		}
 	}
-}
 
+	private ItemStack createMenuItem(Material material, String displayName, String... lore) {
+		ItemStack item = new ItemStack(material);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(displayName);
+		meta.setLore(List.of(lore));
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		item.setItemMeta(meta);
+		return item;
+	}
+
+	private ItemStack createBorderItem() {
+		ItemStack border = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+		ItemMeta borderMeta = border.getItemMeta();
+		borderMeta.setDisplayName("§l");
+		borderMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		border.setItemMeta(borderMeta);
+		return border;
+	}
+
+	private ItemStack createCloseMenuItem() {
+		ItemStack cmb = new ItemStack(Material.BARRIER);
+		ItemMeta cmbMeta = cmb.getItemMeta();
+		cmbMeta.setDisplayName("§cClose Menu");
+		cmbMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		cmb.setItemMeta(cmbMeta);
+		return cmb;
+	}
+}

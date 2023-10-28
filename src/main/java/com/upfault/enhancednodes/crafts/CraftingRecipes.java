@@ -18,7 +18,7 @@ public class CraftingRecipes {
 	public static void registerNodeForgeRecipe(JavaPlugin plugin) {
 		NamespacedKey key = new NamespacedKey(plugin, "enhancednodes_node_forge");
 
-		ShapedRecipe recipe = new ShapedRecipe(key, new NodeForge().createItem());
+		ShapedRecipe recipe = new ShapedRecipe(key, new NodeForge().createNode());
 		recipe.shape(
 				"XOX",
 				"OIO",

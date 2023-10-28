@@ -1,16 +1,15 @@
 package com.upfault.enhancednodes.listeners;
 
 import com.upfault.enhancednodes.nodes.*;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Objects;
 
 public class BlacklistListener implements Listener {
 
@@ -65,18 +64,6 @@ public class BlacklistListener implements Listener {
 			event.setCancelled(true);
 			item.setAmount(0);
 			player.sendMessage("§cRemoved Blacklisted item from your inventory!");
-		}
-	}
-	@EventHandler
-	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getWhoClicked() instanceof Player player) {
-			ItemStack item = event.getCurrentItem();
-			assert item != null;
-			if (isBlacklistedItem(item.asOne())) {
-				event.setCancelled(true);
-				player.getInventory().remove(item);
-				player.sendMessage("§cRemoved Blacklisted item from your inventory!");
-			}
 		}
 	}
 

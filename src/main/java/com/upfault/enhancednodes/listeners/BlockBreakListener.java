@@ -71,7 +71,7 @@ public class BlockBreakListener implements Listener {
 	private OreInfo getOreInfo(Material material) {
 		Map<Material, OreInfo> oreInfo = new HashMap<>();
 		oreInfo.put(Material.STONE, new OreInfo(
-				new MessageChance(1.0 / 5, "§6§lWOAH! §eYou found a §a§lMysterious Fragment§e!", Sound.BLOCK_CHAIN_HIT, new MysteriousFragment().createItemWithoutNBT())
+				new MessageChance(1.0 / 650, "§6§lWOAH! §eYou found a §a§lMysterious Fragment§e!", Sound.BLOCK_CHAIN_HIT, new MysteriousFragment().createItemWithoutNBT())
 
 		));
 		oreInfo.put(Material.COPPER_ORE, new OreInfo(
@@ -153,7 +153,7 @@ public class BlockBreakListener implements Listener {
 				new MessageChance(1.0 / 6000, "§5§lINSANELY RARE DROP! §eYou found a §d§lMYTHIC §enode!", Sound.ENTITY_CAT_PURREOW, new MythicSTNode().createItem())
 		));
 		oreInfo.put(Material.ANCIENT_DEBRIS, new OreInfo(
-				new MessageChance(1.0 / 100, "§5§lCRAZY! §eYou found a §d§lEPIC §enode!", Sound.ENTITY_PLAYER_LEVELUP, new EpicNode().createItem()),
+				new MessageChance(1.0 / 50, "§5§lCRAZY! §eYou found a §d§lEPIC §enode!", Sound.ENTITY_PLAYER_LEVELUP, new EpicNode().createItem()),
 				new MessageChance(1.0 / 250, "§c§lINSANE! §eYou found a §6§lLEGENDARY §enode!", Sound.ENTITY_CAT_PURREOW, new LegendaryNode().createItem()),
 				new MessageChance(1.0 / 1000, "§c§lCRAZY RARE DROP! §eYou found a §5§lMYTHIC §enode!", Sound.ENTITY_CAT_PURREOW, new MythicTKNode().createItem()),
 				new MessageChance(1.0 / 1000, "§5§lINSANELY RARE DROP! §eYou found a §d§lMYTHIC §enode!", Sound.ENTITY_CAT_PURREOW, new MythicSTNode().createItem())
@@ -164,46 +164,51 @@ public class BlockBreakListener implements Listener {
 
 	@EventHandler
 	public void onForgeBreak(BlockBreakEvent event) {
-		Location blockLocation = event.getBlock().getLocation();
-
-		if (!(event.getBlock().getType() == Material.SMITHING_TABLE)) return;
-
 		Block block = event.getBlock();
-		PersistentDataContainer dataContainer = block.getChunk().getPersistentDataContainer();
-		NamespacedKey keyIdentifier = new NamespacedKey(EnhancedNodes.getInstance(), "en_identifier");
-		NamespacedKey keyTimeCreated = new NamespacedKey(EnhancedNodes.getInstance(), "en_time_created");
 
-		if (dataContainer.has(keyIdentifier, PersistentDataType.STRING) && dataContainer.has(keyTimeCreated, PersistentDataType.LONG)) {
-			String enIdentifier = dataContainer.get(keyIdentifier, PersistentDataType.STRING);
-			Long enTimeCreated = dataContainer.get(keyTimeCreated, PersistentDataType.LONG);
+		if (block.getType() == Material.SMITHING_TABLE) {
+			PersistentDataContainer dataContainer = block.getChunk().getPersistentDataContainer();
+			NamespacedKey keyIdentifier = new NamespacedKey(EnhancedNodes.getInstance(), "en_identifier");
+			NamespacedKey keyTimeCreated = new NamespacedKey(EnhancedNodes.getInstance(), "en_time_created");
+			NamespacedKey isForgeKey = new NamespacedKey(EnhancedNodes.getInstance(), "en_isForge");
 
-			if (!dataContainer.isEmpty()) {
-				ItemStack newForgeNode = new NodeForge().createItem();
+			if (dataContainer.has(keyIdentifier, PersistentDataType.STRING) && dataContainer.has(keyTimeCreated, PersistentDataType.LONG) && dataContainer.has(isForgeKey, PersistentDataType.STRING)) {
+				String enIdentifier = dataContainer.get(keyIdentifier, PersistentDataType.STRING);
+				Long enTimeCreated = dataContainer.get(keyTimeCreated, PersistentDataType.LONG);
+				String isForge = dataContainer.get(isForgeKey, PersistentDataType.STRING);
 
-				NBTItem nbtItem = new NBTItem(newForgeNode);
-				nbtItem.setString("en_identifier", enIdentifier);
-				nbtItem.setLong("en_time_created", enTimeCreated);
+				if (!dataContainer.isEmpty()) {
+					ItemStack newForgeNode = new NodeForge().createItem();
 
-				event.setDropItems(false);
+					NBTItem nbtItem = new NBTItem(newForgeNode);
+					nbtItem.setString("en_identifier", enIdentifier);
+					nbtItem.setLong("en_time_created", enTimeCreated);
+					nbtItem.setBoolean("en_isForge", Boolean.valueOf(isForge));
 
-				if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-					event.getBlock().getWorld().dropItemNaturally(blockLocation, nbtItem.getItem());
+					block.setType(Material.AIR);
+
+					if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
+						block.getWorld().dropItemNaturally(block.getLocation(), nbtItem.getItem());
+					}
 				}
 			}
 		}
 	}
+
 	@EventHandler
-	public void onBlockExplode(EntityExplodeEvent event) {
+	public void onForgeExplode(EntityExplodeEvent event) {
 		for (Block block : event.blockList()) {
 			EnhancedNodes.getInstance().logInfo(event.blockList().toString());
 			if (block.getType() == Material.SMITHING_TABLE) {
 				PersistentDataContainer dataContainer = block.getChunk().getPersistentDataContainer();
 				NamespacedKey keyIdentifier = new NamespacedKey(EnhancedNodes.getInstance(), "en_identifier");
 				NamespacedKey keyTimeCreated = new NamespacedKey(EnhancedNodes.getInstance(), "en_time_created");
+				NamespacedKey isForgeKey = new NamespacedKey(EnhancedNodes.getInstance(), "en_isForge");
 
-				if (dataContainer.has(keyIdentifier, PersistentDataType.STRING) && dataContainer.has(keyTimeCreated, PersistentDataType.LONG)) {
+				if (dataContainer.has(keyIdentifier, PersistentDataType.STRING) && dataContainer.has(keyTimeCreated, PersistentDataType.LONG) && dataContainer.has(isForgeKey, PersistentDataType.STRING)) {
 					String enIdentifier = dataContainer.get(keyIdentifier, PersistentDataType.STRING);
 					Long enTimeCreated = dataContainer.get(keyTimeCreated, PersistentDataType.LONG);
+					String isForge = dataContainer.get(isForgeKey, PersistentDataType.STRING);
 
 					if (!dataContainer.isEmpty()) {
 						ItemStack newForgeNode = new NodeForge().createItem();
@@ -211,7 +216,7 @@ public class BlockBreakListener implements Listener {
 						NBTItem nbtItem = new NBTItem(newForgeNode);
 						nbtItem.setString("en_identifier", enIdentifier);
 						nbtItem.setLong("en_time_created", enTimeCreated);
-
+						nbtItem.setBoolean("en_isForge", Boolean.valueOf(isForge));
 						block.setType(Material.AIR);
 
 						block.getWorld().dropItemNaturally(block.getLocation(), nbtItem.getItem());

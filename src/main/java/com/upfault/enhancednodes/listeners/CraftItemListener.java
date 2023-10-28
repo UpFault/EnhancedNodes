@@ -20,6 +20,7 @@ public class CraftItemListener implements Listener {
 					NBT.modify(result, nbt -> {
 						nbt.setString("en_identifier", String.valueOf(UUID.randomUUID()));
 						nbt.setLong("en_time_created", System.currentTimeMillis());
+						nbt.setBoolean("en_isForge", true);
 					});
 				}
 			}
