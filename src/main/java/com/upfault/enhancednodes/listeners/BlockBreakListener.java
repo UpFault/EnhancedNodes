@@ -1,24 +1,28 @@
 package com.upfault.enhancednodes.listeners;
 
 import com.upfault.enhancednodes.EnhancedNodes;
+import com.upfault.enhancednodes.enchants.SmeltingTouchEnchantment;
+import com.upfault.enhancednodes.enchants.TelekinesisEnchantment;
 import com.upfault.enhancednodes.nodes.*;
 import com.upfault.enhancednodes.utils.MessageChance;
 import com.upfault.enhancednodes.utils.OreInfo;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BlockBreakListener implements Listener {
 	@EventHandler
@@ -224,5 +228,70 @@ public class BlockBreakListener implements Listener {
 				}
 			}
 		}
+	}
+
+	@EventHandler
+	public void onEnchantedBreak(BlockBreakEvent event) {
+		Player player = event.getPlayer();
+		Block block = event.getBlock();
+		ItemStack itemInHand = player.getInventory().getItemInMainHand();
+		ItemMeta itemMeta = itemInHand.getItemMeta();
+		List<String> lore = itemMeta.getLore();
+
+		Material blockType = block.getType();
+		Material dropMaterial = getEquivalentDrop(blockType);
+		List<ItemStack> blockDrops = (List<ItemStack>) event.getBlock().getDrops(itemInHand);
+
+		List<Material> allowedDrops = List.of(
+				Material.IRON_ORE, Material.DEEPSLATE_IRON_ORE, Material.GOLD_ORE,
+				Material.DEEPSLATE_GOLD_ORE, Material.ANCIENT_DEBRIS, Material.COPPER_ORE,
+				Material.DEEPSLATE_COPPER_ORE
+		);
+
+		boolean hasSmeltingTouch = lore.contains("§7Smelting Touch I") && itemInHand.getEnchantments().containsKey(new SmeltingTouchEnchantment());
+		boolean hasTelekinesis = lore.contains("§7Telekinesis I") && itemInHand.getEnchantments().containsKey(new TelekinesisEnchantment());
+
+		if ((hasSmeltingTouch || hasTelekinesis) && allowedDrops.contains(blockType)
+				&& itemInHand.getType().name().contains("PICKAXE")
+				&& player.getGameMode() != GameMode.CREATIVE) {
+
+			if (!blockDrops.isEmpty()) {
+				if (hasTelekinesis && hasSmeltingTouch) {
+					if (player.getInventory().firstEmpty() != -1) {
+							player.getInventory().addItem(new ItemStack(dropMaterial, event.getBlock().getDrops().size()));
+					} else {
+						block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(dropMaterial, event.getBlock().getDrops().size()));
+					}
+				} else {
+					if(hasSmeltingTouch) {
+						ItemStack itemToDrop = new ItemStack(dropMaterial, blockDrops.size());
+						block.getWorld().dropItemNaturally(block.getLocation(), itemToDrop);
+					} else {
+						ItemStack itemToDrop = new ItemStack(blockDrops.get(0).getType(), blockDrops.size());
+
+						if (player.getInventory().firstEmpty() != -1) {
+							player.getInventory().addItem(new ItemStack(itemToDrop.getType(), event.getBlock().getDrops().size()));
+						} else {
+							block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(itemToDrop.getType(), event.getBlock().getDrops().size()));
+						}
+					}
+				}
+
+				block.setType(Material.AIR);
+			}
+		}
+	}
+
+
+
+
+	private Material getEquivalentDrop(Material blockMaterial) {
+		return switch (blockMaterial) {
+			case IRON_ORE, DEEPSLATE_IRON_ORE -> Material.IRON_INGOT;
+			case GOLD_ORE, DEEPSLATE_GOLD_ORE -> Material.GOLD_INGOT;
+			case COPPER_ORE, DEEPSLATE_COPPER_ORE -> Material.COPPER_INGOT;
+			case ANCIENT_DEBRIS -> Material.NETHERITE_SCRAP;
+			default -> null;
+		};
 	}
 }

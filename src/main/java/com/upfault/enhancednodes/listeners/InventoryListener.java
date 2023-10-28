@@ -1,11 +1,14 @@
 package com.upfault.enhancednodes.listeners;
 
 import com.upfault.enhancednodes.EnhancedNodes;
+import com.upfault.enhancednodes.enchants.SmeltingTouchEnchantment;
 import com.upfault.enhancednodes.guis.NodeForgePanel;
 import com.upfault.enhancednodes.nodes.MysteriousFragment;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -106,6 +109,17 @@ public class InventoryListener implements Listener {
 					}
 				} else if (clickedSlot == 13) {
 					if (forgeMenu.getItem(19) != null && forgeMenu.getItem(25) != null) {
+						ItemStack itemSlot19 = forgeMenu.getItem(19);
+						ItemStack itemSlot25 = forgeMenu.getItem(25);
+
+						if (itemSlot19.getItemMeta() != null && itemSlot19.getItemMeta().hasEnchant(Objects.requireNonNull(Enchantment.getByKey(new SmeltingTouchEnchantment().getKey())))) {
+							ItemMeta metaSlot25 = itemSlot25.getItemMeta();
+							if (metaSlot25 != null && metaSlot25.hasDisplayName() && metaSlot25.getDisplayName().contains("Smelting Touch")) {
+								player.sendMessage("§cThis item already has the Smelting Touch Node applied.");
+								return;
+							}
+						}
+
 						NodeForgePanel.combiningNode.put(player.getUniqueId(), true);
 						BukkitRunnable rainbowAnimation = getAnimation(player);
 						rainbowAnimation.runTaskTimer(EnhancedNodes.getInstance(), 0, 0);
@@ -190,7 +204,6 @@ public class InventoryListener implements Listener {
 				} else {
 					evaluateForge(product);
 					cancel();
-					return;
 				}
 			}
 
@@ -236,12 +249,70 @@ public class InventoryListener implements Listener {
 			}
 
 			private void forgeSuccessful() {
-				forgeMenu.setItem(31, NodeForgePanel.getInventory().getItem(19));
+				ItemStack itemSlot19 = forgeMenu.getItem(19);
+				ItemStack itemSlot25 = forgeMenu.getItem(25);
+
+				if (itemSlot19 != null && itemSlot25 != null) {
+					String itemNameSlot25 = null;
+					ItemMeta metaSlot19 = itemSlot19.getItemMeta();
+
+					if (itemSlot25.getItemMeta() != null) {
+						itemNameSlot25 = itemSlot25.getItemMeta().getDisplayName();
+					}
+
+					if (itemNameSlot25 != null && itemNameSlot25.contains("Smelting Touch") && metaSlot19 != null) {
+						Enchantment smeltingTouch = Enchantment.getByKey(NamespacedKey.minecraft("en_smeltingtouch"));
+						assert smeltingTouch != null;
+						metaSlot19.addEnchant(smeltingTouch, 1, true);
+
+						List<String> lore = metaSlot19.getLore();
+
+						if (lore != null) {
+							lore.add("§7Smelting Touch I");
+							metaSlot19.setLore(lore);
+						} else {
+							List<String> newLore = new ArrayList<>();
+							newLore.add("§7Smelting Touch I");
+							metaSlot19.setLore(newLore);
+						}
+
+
+						itemSlot19.setItemMeta(metaSlot19);
+						forgeMenu.setItem(31, itemSlot19);
+					}
+
+					if (itemNameSlot25 != null && itemNameSlot25.contains("Telekinesis") && metaSlot19 != null) {
+						Enchantment telekinesis = Enchantment.getByKey(NamespacedKey.minecraft("en_telekinesis"));
+						assert telekinesis != null;
+						metaSlot19.addEnchant(telekinesis, 1, true);
+
+						List<String> lore = metaSlot19.getLore();
+
+						if (lore != null) {
+							lore.add("§7Telekinesis I");
+							metaSlot19.setLore(lore);
+						} else {
+							List<String> newLore = new ArrayList<>();
+							newLore.add("§7Telekinesis I");
+							metaSlot19.setLore(newLore);
+						}
+
+
+						itemSlot19.setItemMeta(metaSlot19);
+						forgeMenu.setItem(31, itemSlot19);
+					}
+
+				}
+
 				forgeMenu.setItem(19, null);
 				forgeMenu.setItem(25, null);
-				player.sendMessage("§aYour item was forge successfully!");
+
+				player.sendMessage("§aYour item was forged successfully!");
 				player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
 			}
+
+
+
 
 			private void forgeUnsuccessful() {
 				forgeMenu.setItem(31, forgeMenu.getItem(19));

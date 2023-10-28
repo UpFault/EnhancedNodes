@@ -2,9 +2,10 @@ package com.upfault.enhancednodes;
 
 import com.upfault.enhancednodes.commands.enhancedNodesCommand;
 import com.upfault.enhancednodes.crafts.CraftingRecipes;
+import com.upfault.enhancednodes.enchants.SmeltingTouchEnchantment;
+import com.upfault.enhancednodes.enchants.TelekinesisEnchantment;
 import com.upfault.enhancednodes.guis.AdminPanel;
 import com.upfault.enhancednodes.guis.CheatSheet;
-import com.upfault.enhancednodes.guis.NodeForgePanel;
 import com.upfault.enhancednodes.listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -33,9 +34,10 @@ public final class EnhancedNodes extends JavaPlugin {
             return;
         }
 
-        registerEvents();
-        registerCommands();
         registerCrafts();
+        registerCommands();
+        registerEvents();
+        registerEnchants();
     }
 
     private void registerCrafts() {
@@ -46,6 +48,7 @@ public final class EnhancedNodes extends JavaPlugin {
         Objects.requireNonNull(getServer().getPluginCommand("enhancednodes")).setExecutor(new enhancedNodesCommand());
         Objects.requireNonNull(getServer().getPluginCommand("enhancednodes")).setTabCompleter(new enhancedNodesCommand());
     }
+
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new AdminPanel(), this);
@@ -59,8 +62,19 @@ public final class EnhancedNodes extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
     }
 
+    public void registerEnchants() {
+        SmeltingTouchEnchantment.register();
+        TelekinesisEnchantment.register();
+    }
+
     @Override
     public void onDisable() {
+        unRegisterEnchants();
+    }
+
+    private void unRegisterEnchants() {
+        SmeltingTouchEnchantment.unregister();
+        TelekinesisEnchantment.unregister();
     }
 
     public static EnhancedNodes getInstance() {
