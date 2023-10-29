@@ -59,14 +59,30 @@ None
 
 ## Plugin Showcase
 
-- ![Node Forge Recipe](https://i.imgur.com/kV5n496.png)
-- ![Mythic Node](https://i.imgur.com/Yc3Qs8V.png)
-- ![Legendary Node](https://i.imgur.com/sz7Ytbf.png)
-- ![Epic Node](https://i.imgur.com/5XUIRLZ.png)
-- ![Rare Node](https://i.imgur.com/dvVFuFa.png)
-- ![Uncommon Node](https://i.imgur.com/tWb0hY5.png)
-- ![Common Node](https://i.imgur.com/FTG1FbH.png)
-- ![Mysterious Fragment](https://i.imgur.com/f2vIB1m.png)
+### Node Forge Recipe
+![Node Forge Recipe](https://i.imgur.com/kV5n496.png)
+
+### Mythic Node
+![Mythic Node](https://i.imgur.com/Yc3Qs8V.png)
+
+### Legendary Node
+![Legendary Node](https://i.imgur.com/sz7Ytbf.png)
+
+### Epic Node
+![Epic Node](https://i.imgur.com/5XUIRLZ.png)
+
+### Rare Node
+![Rare Node](https://i.imgur.com/dvVFuFa.png)
+
+### Uncommon Node
+![Uncommon Node](https://i.imgur.com/tWb0hY5.png)
+
+### Common Node
+![Common Node](https://i.imgur.com/FTG1FbH.png)
+
+### Mysterious Fragment
+![Mysterious Fragment](https://i.imgur.com/f2vIB1m.png)
+
 
 ## Ore Drop Chances
 
