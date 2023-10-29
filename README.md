@@ -84,9 +84,6 @@ None
 ### Mysterious Fragment
 ![Mysterious Fragment](https://i.imgur.com/f2vIB1m.png)
 
-
-## Ore Drop Chances
-
 ## Ore Drop Chances
 
 ### Stone
