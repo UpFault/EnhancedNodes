@@ -9,44 +9,37 @@ EnhancedNodes is a Minecraft plugin that adds exciting, upgrade nodes when minin
 
 ## Installation
 
-To install this plugin click on the releases tab on the right, and click on EnhancedNodes-{VERSION}.jar, then place this into your Minecraft Servers plugin folder, ensure you also have the latest version of NBTAPI installed(https://www.spigotmc.org/resources/nbt-api.7939/)
+To install this plugin, visit the [releases tab](https://github.com/EnhancedNodes/releases) and download the EnhancedNodes-{VERSION}.jar. Place this file in your Minecraft server's plugin folder. Ensure you have the latest version of [NBTAPI](https://www.spigotmc.org/resources/nbt-api.7939/) installed.
 
 ## Usage
 
-Explain how users can use the plugin and its various functionalities.
+Describe how users can benefit from the plugin and utilize its functionalities in the game.
 
 ## Configuration
 
-Currently there are no customization's for this, I have plans on adding a translation file so you can update the messages in the plugin to be language specific.
+At present, there are no customizable settings. Future plans include adding a translation file for language-specific message updates.
 
 ## Commands
 
-There is only one command for this plugin /enhancednodes : /en
-
-/enhancednodes help - Display's command information.
-/enhancednodes info - Display's information about the plugin.
-/enhancednodes panel - Display's the admin panel.
+- `/enhancednodes help` - Displays command information.
+- `/enhancednodes info` - Displays information about the plugin.
+- `/enhancednodes panel` - Displays the admin panel.
 
 ## Permissions
 
-enhancednodes.admin is needed to use the /enhancednodes command, this is because the command only has features related to owner/admin powers.
-You will need to have a permissions plugin installed unless your staff have operator, plugins like PEX(PermissionEX) or LuckPerms work with this plugin.
+`enhancednodes.admin` - Required for using the `/enhancednodes` command. Intended for owner/admin powers. A permissions plugin like PEX or LuckPerms is needed unless staff have operator status.
 
 ## Credits
 
-tr7zw - NBT API (Without this API I wouldn't have been able to make this project happen as fast as it did)
+- **tr7zw** - NBT API (Critical for swift project development)
 
 ## Issues
 
-If you find any issues create a report in the issues tab with this format.
-
-Bug:
-
-How to recreate:
-
-Logs:
-
-Video Link(Optional):
+Report any issues in the following format:
+- **Bug:**
+- **How to recreate:**
+- **Logs:**
+- **Video Link (Optional):**
 
 ## License
 
@@ -54,15 +47,11 @@ Specify the license under which your plugin is distributed.
 
 ## Support
 
-I currently do not have a support server but feel free to add me on discord for assistance. @upfault
-
-## Example
-
-Provide an example or showcase to illustrate how the plugin works.
+There's no dedicated support server. For assistance, contact via Discord: @upfault
 
 ## Version
 
-The Plugin was Tested on 1.20, but may work with other versions/servers. I may add supports for other main server versions at a later date.
+Tested on 1.20 but potentially compatible with other versions/servers. Future plans may include support for different server versions.
 
 ## Changelog
 
@@ -70,12 +59,62 @@ None
 
 ## Plugin Showcase
 
-Node Forge Recipe[(https://i.imgur.com/kV5n496.png)]
-Mythic Node[(https://i.imgur.com/Yc3Qs8V.png)]
-Mythic Node[(https://i.imgur.com/6Gc2y32.png)]
-Legendary Node[(https://i.imgur.com/sz7Ytbf.png)]
-Epic Node[(https://i.imgur.com/5XUIRLZ.png)]
-Rare Node[(https://i.imgur.com/dvVFuFa.png)]
-Uncommon Node[(https://i.imgur.com/tWb0hY5.png)]
-Common Node[(https://i.imgur.com/FTG1FbH.png)]
-Mysterious Fragment[(https://i.imgur.com/f2vIB1m.png)]
+- ![Node Forge Recipe](https://i.imgur.com/kV5n496.png)
+- ![Mythic Node](https://i.imgur.com/Yc3Qs8V.png)
+- ![Legendary Node](https://i.imgur.com/sz7Ytbf.png)
+- ![Epic Node](https://i.imgur.com/5XUIRLZ.png)
+- ![Rare Node](https://i.imgur.com/dvVFuFa.png)
+- ![Uncommon Node](https://i.imgur.com/tWb0hY5.png)
+- ![Common Node](https://i.imgur.com/FTG1FbH.png)
+- ![Mysterious Fragment](https://i.imgur.com/f2vIB1m.png)
+
+## Ore Drop Chances
+
+### Stone
+- Mysterious Fragment: 1 in 650
+
+### Copper Ore & Deepslate Copper Ore
+- Common Node: 1 in 15,750
+- Uncommon Node: 1 in 17,000
+
+### Lapis Ore & Deepslate Lapis Ore
+- Common Node: 1 in 14,000
+- Uncommon Node: 1 in 16,000
+
+### Coal Ore & Deepslate Coal Ore
+- Common Node: 1 in 8,000
+- Uncommon Node: 1 in 9,500
+
+### Iron Ore & Deepslate Iron Ore
+- Common Node: 1 in 8,000
+- Uncommon Node: 1 in 9,500
+
+### Gold Ore & Deepslate Gold Ore
+- Common Node: 1 in 9,000
+- Uncommon Node: 1 in 9,750
+
+### Nether Gold Ore & Nether Quartz Ore
+- Common Node: 1 in 9,275
+- Uncommon Node: 1 in 9,985
+
+### Redstone Ore & Deepslate Redstone Ore
+- Common Node: 1 in 10,000
+- Uncommon Node: 1 in 10,500
+
+### Diamond Ore & Deepslate Diamond Ore
+- Rare Node: 1 in 5,500
+- Epic Node: 1 in 6,500
+- Legendary Node: 1 in 7,500
+
+### Emerald Ore & Deepslate Emerald Ore
+- Rare Node: 1 in 2,500
+- Epic Node: 1 in 3,500
+- Legendary Node: 1 in 5,000
+- Mythic TK Node: 1 in 6,000
+- Mythic ST Node: 1 in 6,000
+
+### Ancient Debris
+- Epic Node: 1 in 50
+- Legendary Node: 1 in 250
+- Mythic TK Node: 1 in 1,000
+- Mythic ST Node: 1 in 1,000
