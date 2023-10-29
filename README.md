@@ -64,6 +64,7 @@ None
 
 ### Mythic Node
 ![Mythic Node](https://i.imgur.com/Yc3Qs8V.png)
+![Mythic Node](https://i.imgur.com/RPdAX0X.png)
 
 ### Legendary Node
 ![Legendary Node](https://i.imgur.com/sz7Ytbf.png)
