@@ -16,6 +16,11 @@ At present, there are no customizable settings. Future plans include adding a tr
 - `/enhancednodes info` - Displays information about the plugin.
 - `/enhancednodes panel` - Displays the admin panel.
 
+## Plans
+
+Currently I do plan on updating the plugin to have language-specific messages. this should be done within a week as I work a full time job and have worked on this in my spare time.
+I also have a statistic webpage to view the stats about drops as well as other things staff/owners may want to view. Currently this feature is added but does not work.
+
 ## Permissions
 
 `enhancednodes.admin` - Required for using the `/enhancednodes` command. Intended for owner/admin powers. A permissions plugin like PEX or LuckPerms is needed unless staff have operator status.
