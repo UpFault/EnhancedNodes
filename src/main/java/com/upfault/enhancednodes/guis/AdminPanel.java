@@ -60,8 +60,8 @@ public class AdminPanel implements Listener {
 			if (slot == 10) {
 				new CheatSheet().openInventory(player);
 			} else if (slot == 11) {
-				player.sendMessage("§aCreating spreadsheet of plugin statistics.");
-				player.sendMessage("§ago into /plugins/EnhancedNodes/statistics to view your server statistics!");
+//				player.sendMessage("§aCreating spreadsheet of plugin statistics.");
+//				player.sendMessage("§ago into /plugins/EnhancedNodes/statistics to view your server statistics!");
 				player.closeInventory();
 			} else if (slot == 22) {
 				player.closeInventory();

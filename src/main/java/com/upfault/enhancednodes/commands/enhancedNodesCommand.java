@@ -37,7 +37,6 @@ public class enhancedNodesCommand implements CommandExecutor, TabCompleter {
 				player.sendMessage("§a/enhancednodes help §f- §eDisplay's command information.");
 				player.sendMessage("§a/enhancednodes info §f- §eDisplay's information about the plugin.");
 				player.sendMessage("§a/enhancednodes panel §f- §eDisplay's the admin panel.");
-				player.sendMessage("§a/checkkey §f- §eUsed to check if an item has a proper NBT Key.");
 				player.sendMessage("§e§l-------------------------------------------");
 				return true;
 			}
