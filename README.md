@@ -38,7 +38,8 @@ Report any issues in the following format:
 
 ## License
 
-Specify the license under which your plugin is distributed.
+### Attribution-NonCommercial-NoDerivatives 4.0 International
+![Attribution-NonCommercial-NoDerivatives 4.0 International](https://github.com/UpFault/EnhancedNodes/blob/master/LICENSE.md)
 
 ## Support
 
