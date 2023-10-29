@@ -2,11 +2,6 @@
 
 EnhancedNodes is a Minecraft plugin that adds exciting, upgrade nodes when mining ores, making your gameplay more engaging and enjoyable.
 
-## Features
-
-- Custom Nodes
-- New Workbench
-
 ## Installation
 
 To install this plugin, visit the [releases tab](https://github.com/EnhancedNodes/releases) and download the EnhancedNodes-{VERSION}.jar. Place this file in your Minecraft server's plugin folder. Ensure you have the latest version of [NBTAPI](https://www.spigotmc.org/resources/nbt-api.7939/) installed.
