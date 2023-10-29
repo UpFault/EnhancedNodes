@@ -2,6 +2,7 @@ package com.upfault.enhancednodes.listeners;
 
 import com.upfault.enhancednodes.EnhancedNodes;
 import com.upfault.enhancednodes.enchants.SmeltingTouchEnchantment;
+import com.upfault.enhancednodes.enchants.TelekinesisEnchantment;
 import com.upfault.enhancednodes.guis.NodeForgePanel;
 import com.upfault.enhancednodes.nodes.MysteriousFragment;
 import de.tr7zw.nbtapi.NBTItem;
@@ -117,6 +118,34 @@ public class InventoryListener implements Listener {
 							if (metaSlot25 != null && metaSlot25.hasDisplayName() && metaSlot25.getDisplayName().contains("Smelting Touch")) {
 								player.sendMessage("§cThis item already has the Smelting Touch Node applied.");
 								return;
+							}
+						}
+
+						if (itemSlot19.getItemMeta() != null && itemSlot19.getItemMeta().hasEnchant(Objects.requireNonNull(Enchantment.getByKey(new TelekinesisEnchantment().getKey())))) {
+							ItemMeta metaSlot25 = itemSlot25.getItemMeta();
+							if (metaSlot25 != null && metaSlot25.hasDisplayName() && metaSlot25.getDisplayName().contains("Telekinesis")) {
+								player.sendMessage("§cThis item already has the Smelting Touch Node applied.");
+								return;
+							}
+						}
+
+						if (itemSlot19.getItemMeta() != null && itemSlot19.getItemMeta().hasEnchant(Enchantment.DIG_SPEED)) {
+							if(itemSlot19.getItemMeta().getEnchantLevel(Enchantment.DIG_SPEED) == 10) {
+								ItemMeta metaSlot25 = itemSlot25.getItemMeta();
+								if (metaSlot25 != null && metaSlot25.hasDisplayName() && metaSlot25.getDisplayName().contains("Efficiency")) {
+									player.sendMessage("§cThis item already has the Max Efficiency.");
+									return;
+								}
+							}
+						}
+
+						if (itemSlot19.getItemMeta() != null && itemSlot19.getItemMeta().hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
+							if(itemSlot19.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS) == 5) {
+								ItemMeta metaSlot25 = itemSlot25.getItemMeta();
+								if (metaSlot25 != null && metaSlot25.hasDisplayName() && metaSlot25.getDisplayName().contains("Fortune")) {
+									player.sendMessage("§cThis item already has the Max Fortune.");
+									return;
+								}
 							}
 						}
 
@@ -297,6 +326,49 @@ public class InventoryListener implements Listener {
 							metaSlot19.setLore(newLore);
 						}
 
+
+						itemSlot19.setItemMeta(metaSlot19);
+						forgeMenu.setItem(31, itemSlot19);
+					}
+
+					if (itemNameSlot25 != null && itemNameSlot25.contains("Efficiency") && metaSlot19 != null) {
+						if (metaSlot19.hasEnchant(Enchantment.DIG_SPEED)) {
+							int currentEfficiencyLevel = metaSlot19.getEnchantLevel(Enchantment.DIG_SPEED);
+
+							int newEfficiencyLevel = currentEfficiencyLevel + 1;
+
+							metaSlot19.addEnchant(Enchantment.DIG_SPEED, newEfficiencyLevel, true);
+
+							itemSlot19.setItemMeta(metaSlot19);
+							forgeMenu.setItem(31, itemSlot19);
+						} else {
+							metaSlot19.addEnchant(Enchantment.DIG_SPEED, 1, true);
+
+							itemSlot19.setItemMeta(metaSlot19);
+							forgeMenu.setItem(31, itemSlot19);
+						}
+
+
+						itemSlot19.setItemMeta(metaSlot19);
+						forgeMenu.setItem(31, itemSlot19);
+					}
+
+					if (itemNameSlot25 != null && itemNameSlot25.contains("Fortune") && metaSlot19 != null) {
+						if (metaSlot19.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS)) {
+							int currentEfficiencyLevel = metaSlot19.getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
+
+							int newEfficiencyLevel = currentEfficiencyLevel + 1;
+
+							metaSlot19.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, newEfficiencyLevel, true);
+
+							itemSlot19.setItemMeta(metaSlot19);
+							forgeMenu.setItem(31, itemSlot19);
+						} else {
+							metaSlot19.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 1, true);
+
+							itemSlot19.setItemMeta(metaSlot19);
+							forgeMenu.setItem(31, itemSlot19);
+						}
 
 						itemSlot19.setItemMeta(metaSlot19);
 						forgeMenu.setItem(31, itemSlot19);

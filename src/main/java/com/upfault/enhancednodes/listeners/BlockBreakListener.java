@@ -237,15 +237,18 @@ public class BlockBreakListener implements Listener {
 		ItemStack itemInHand = player.getInventory().getItemInMainHand();
 		ItemMeta itemMeta = itemInHand.getItemMeta();
 		List<String> lore = itemMeta.getLore();
-
+		int totalDrops = 0;
 		Material blockType = block.getType();
 		Material dropMaterial = getEquivalentDrop(blockType);
 		List<ItemStack> blockDrops = (List<ItemStack>) event.getBlock().getDrops(itemInHand);
 
+		for (ItemStack drop : blockDrops) {
+			totalDrops += drop.getAmount();
+		}
 		List<Material> allowedDrops = List.of(
 				Material.IRON_ORE, Material.DEEPSLATE_IRON_ORE, Material.GOLD_ORE,
 				Material.DEEPSLATE_GOLD_ORE, Material.ANCIENT_DEBRIS, Material.COPPER_ORE,
-				Material.DEEPSLATE_COPPER_ORE
+				Material.DEEPSLATE_COPPER_ORE, Material.COBBLESTONE
 		);
 
 		boolean hasSmeltingTouch = lore.contains("§7Smelting Touch I") && itemInHand.getEnchantments().containsKey(new SmeltingTouchEnchantment());
@@ -258,38 +261,45 @@ public class BlockBreakListener implements Listener {
 			if (!blockDrops.isEmpty()) {
 				if (hasTelekinesis && hasSmeltingTouch) {
 					if (player.getInventory().firstEmpty() != -1) {
-							player.getInventory().addItem(new ItemStack(dropMaterial, event.getBlock().getDrops().size()));
+							player.getInventory().addItem(new ItemStack(dropMaterial, totalDrops));
 					} else {
-						block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(dropMaterial, event.getBlock().getDrops().size()));
+						block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(dropMaterial, totalDrops));
 					}
 				} else {
 					if(hasSmeltingTouch) {
-						ItemStack itemToDrop = new ItemStack(dropMaterial, blockDrops.size());
+						ItemStack itemToDrop = new ItemStack(dropMaterial, totalDrops);
 						block.getWorld().dropItemNaturally(block.getLocation(), itemToDrop);
 					} else {
-						ItemStack itemToDrop = new ItemStack(blockDrops.get(0).getType(), blockDrops.size());
+						ItemStack itemToDrop = new ItemStack(blockDrops.get(0).getType(), totalDrops);
 
 						if (player.getInventory().firstEmpty() != -1) {
-							player.getInventory().addItem(new ItemStack(itemToDrop.getType(), event.getBlock().getDrops().size()));
+							player.getInventory().addItem(new ItemStack(itemToDrop.getType(), totalDrops));
 						} else {
-							block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(itemToDrop.getType(), event.getBlock().getDrops().size()));
+							block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(itemToDrop.getType(), totalDrops));
 						}
 					}
 				}
-
-				block.setType(Material.AIR);
 			}
 		}
+
+		if(hasTelekinesis) {
+			ItemStack itemToDrop = new ItemStack(blockDrops.get(0).getType(), totalDrops);
+
+			if (player.getInventory().firstEmpty() != -1) {
+				player.getInventory().addItem(new ItemStack(itemToDrop.getType(), totalDrops));
+			} else {
+				block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(itemToDrop.getType(), totalDrops));
+			}
+			block.setType(Material.AIR);
+		}
 	}
-
-
-
 
 	private Material getEquivalentDrop(Material blockMaterial) {
 		return switch (blockMaterial) {
 			case IRON_ORE, DEEPSLATE_IRON_ORE -> Material.IRON_INGOT;
 			case GOLD_ORE, DEEPSLATE_GOLD_ORE -> Material.GOLD_INGOT;
 			case COPPER_ORE, DEEPSLATE_COPPER_ORE -> Material.COPPER_INGOT;
+			case COBBLESTONE -> Material.STONE;
 			case ANCIENT_DEBRIS -> Material.NETHERITE_SCRAP;
 			default -> null;
 		};
