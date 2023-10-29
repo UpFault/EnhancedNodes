@@ -6,10 +6,6 @@ EnhancedNodes is a Minecraft plugin that adds exciting, upgrade nodes when minin
 
 To install this plugin, visit the [releases tab](https://github.com/EnhancedNodes/releases) and download the EnhancedNodes-{VERSION}.jar. Place this file in your Minecraft server's plugin folder. Ensure you have the latest version of [NBTAPI](https://www.spigotmc.org/resources/nbt-api.7939/) installed.
 
-## Usage
-
-Describe how users can benefit from the plugin and utilize its functionalities in the game.
-
 ## Configuration
 
 At present, there are no customizable settings. Future plans include adding a translation file for language-specific message updates.
